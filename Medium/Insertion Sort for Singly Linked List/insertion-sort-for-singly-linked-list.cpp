@@ -44,23 +44,37 @@ struct Node {
 class Solution
 {
     public:
-    Node* insertionSort(struct Node* head_ref)
+    Node* insertionSort(struct Node* head)
     {
         //code here
-        vector<int> v;
-        struct Node* temp=head_ref;
+        struct Node* temp=head->next;
+        struct Node* prev=head;
         while(temp){
-            v.push_back(temp->data);
-            temp=temp->next;
+            struct Node* temp1=temp->next;
+            if(temp->data<prev->data){
+                if(temp->data<=head->data){
+                    temp->next=head;
+                    if(head->next==temp)
+                    head->next=temp1;
+                    head=temp;
+                }
+                else{
+                    struct Node* temp2=head;
+                    struct Node* temp3=head->next;
+                    while(temp->data>temp3->data){
+                        temp2=temp2->next;
+                        temp3=temp3->next;
+                    }
+                    temp2->next=temp;
+                    temp->next=temp3;
+                }
+                prev->next=temp1;
+            }
+            else
+            prev=temp;
+            temp=temp1;
         }
-        sort(v.begin(),v.end());
-        head_ref->data=v[0];
-        temp=head_ref;
-        for(int i=1;i<v.size();i++){
-            temp->next->data=v[i];
-            temp=temp->next;
-        }
-        return head_ref;
+        return head;
     }
     
 };
