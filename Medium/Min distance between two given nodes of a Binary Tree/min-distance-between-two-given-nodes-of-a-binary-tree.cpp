@@ -87,12 +87,6 @@ Node* buildTree(string str) {
 
 // } Driver Code Ends
 /* A binary tree node
-struct Node
-{
-    int data;
-    Node* left, * right;
-}; */
-
 /* A binary tree node
 struct Node
 {
@@ -100,58 +94,49 @@ struct Node
     Node* left, * right;
 }; */
 
-class Solution
-{
+class Solution{
     public:
-    Node* lca(Node* root ,int n1 ,int n2 )
-    {
-       if(root==NULL or root->data==n1 or root->data==n2)
-       {
-           return root;
-       }
-       Node* left=lca(root->left,n1,n2);
-       Node* right=lca(root->right,n1,n2);
-       if(left==NULL)
-       {
-           return right;
-       }
-       if(right==NULL)
-       {
-           return left;
-       }
-       else
-       {
-           return root;
-       }
-    }
-    int findDistance(Node* root, int target, int dist) 
-    {
+    /* Should return minimum distance between a and b
+    in a tree with given root*/
+    void traverse(Node* root,int x,vector<int> &v1,int &fl){
         if(root==NULL)
-        {
-            return -1; 
+        return;
+        v1.push_back(root->data);
+        if(root->data==x){
+            fl=1;
+            return;
         }
-        if(root->data==target)
-        {
-            return dist;
-        }
-        int leftDist = findDistance(root->left,target,dist+1);
-        int rightDist = findDistance(root->right,target,dist+1);
-        if(leftDist!=-1)
-        {
-            return leftDist;
-        }
-        if(rightDist!=-1)
-        {
-            return rightDist;
-        }
-        return -1;
+        if(fl==0)
+        traverse(root->left,x,v1,fl);
+        if(fl==0)
+        traverse(root->right,x,v1,fl);
+        if(fl==0)
+        v1.pop_back();
     }
-    int findDist(Node* root, int a, int b) 
-    {
-        Node* lowest=lca(root,a,b);
-        int distA = findDistance(lowest,a,0);
-        int distB = findDistance(lowest,b,0);
-        return distA+distB;
+    int findDist(Node* root, int a, int b) {
+        // Your code here
+        vector<int> v1;
+        vector<int> v2;
+        int fl=0;
+        traverse(root,a,v1,fl);
+        v2=v1;
+        v1.clear();
+        fl=0;
+        traverse(root,b,v1,fl);
+        int n1=v1.size();
+        int n2=v2.size();
+        int size=min(n1,n2);
+        int ind=-1;
+        for(int i=0;i<size;i++){
+            if(v1[i]!=v2[i]){
+                ind=i;
+                break;
+            }
+        }
+        if(ind==-1){
+            ind=size;
+        }
+        return ((n2-ind)+(n1-ind));
     }
 };
 
