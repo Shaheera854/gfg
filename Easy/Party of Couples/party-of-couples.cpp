@@ -9,15 +9,17 @@ using namespace std;
 
 class Solution{
     public:
-    int findSingle(int N, int arr[]){
+    int findSingle(int n, int arr[]){
         // code here
-        int res=0;
-        for(int i=0;i<N;i++){
-            res^=arr[i];
+        int ans=0;
+        for(int i=0;i<n;i++)
+        {
+            ans^=arr[i];
         }
-        return res;
+        return ans;
     }
 };
+
 
 //{ Driver Code Starts.
 int main() 
