@@ -103,38 +103,26 @@ class Solution{
     public:
     /*You are required to complete this method */
     // Return the size of the largest sub-tree which is also a BST
-    vector<int> solve(Node* root){
-        if(root == NULL) return {1,0,INT_MAX,INT_MIN};
-        if(root->left == NULL and root->right == NULL) return {1,1,root->data,root->data};
-        vector<int> left = solve(root->left);
-        vector<int> right = solve(root->right);
-        if(left[0] and right[0] and root->data > left[3] and root->data < right[2]){
-            int mini,maxi;
-            if(left[2] == INT_MAX){
-                mini = root->data;
-            }
-            else{
-                mini = left[2];
-            }
-            if(right[3] == INT_MIN){
-                maxi = root->data;
-            }
-            else{
-                maxi = right[3];
-            }
-            return {1, left[1]+right[1]+1,mini,maxi};
+    vector<int> isBST(Node* root, int &maxi){
+        if(root == NULL)
+        return {1,0,INT_MAX,INT_MIN};
+        vector<int> isleft = isBST(root->left,maxi);
+        vector<int> isright = isBST(root->right,maxi);
+        if(isleft[0]==1 and isright[0]==1  and (!root->left or root->data > isleft[3]) and (!root->right or root->data < isright[2])){
+            maxi = max(maxi,isleft[1]+isright[1]+1);
+            return {1,isleft[1]+isright[1]+1,min(isleft[2],root->data),max(isright[3],root->data)};
         }
-        return {0,max(left[1],right[1]),INT_MAX,INT_MIN};
+        else
+        return {0,0,0,0};
     }
     int largestBst(Node *root)
     {
     	//Your code here
-    	vector<int> v = solve(root);
-    	return v[1];
+    	int maxi = 0;
+    	vector<int> v = isBST(root,maxi);
+    	return maxi;
     }
 };
-
-
 
 //{ Driver Code Starts.
 
